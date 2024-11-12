@@ -51,6 +51,10 @@ ome_core:mapAnnotationValue rdfs:domain ome_core:Annotation ,
 #    Data properties
 #################################################################
 
+###  http://purl.org/dc/elements/1.1/identifier
+dc:identifier rdfs:domain ome_core:Object .
+
+
 ###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/nameSpace
 ome_core:nameSpace rdfs:domain ome_core:Annotation ,
                                ome_core:MapAnnotation .
@@ -64,8 +68,18 @@ ome_core:tagAnnotationValue rdf:type owl:DatatypeProperty .
 #    Classes
 #################################################################
 
+###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/Dataset
+ome_core:Dataset rdfs:subClassOf ome_core:Object .
+
+
 ###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/Folder
 ome_core:Folder rdfs:subClassOf owl:Thing .
+
+
+###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/Object
+ome_core:Object rdf:type owl:Class ;
+                rdfs:comment "ome_core:Object is an abstract base class for all classes that have an id (dc:identifier) property."@en ;
+                rdfs:label "object with id" .
 
 
 ###  http://www.openmicroscopy.org/rdf/2016-06/ome_core/StructuredAnnotation

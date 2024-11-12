@@ -343,6 +343,7 @@ select ?n_projects ?n_datasets ?n_images where {{
 
     def test_image_properties(self):
         """ Check Image instances have all expected properties. """
+
         query = """prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
 SELECT distinct ?s ?prop WHERE {
     ?s a ome_core:Image;
@@ -367,6 +368,23 @@ SELECT distinct ?s ?prop WHERE {
 
         print(response_df)
 
+    def test_objects_with_id(self):
+        """ Check that all classes that derive from ome_core:Object have the dc:identifier property. """
+
+        query = """
+prefix ome_core: <http://www.openmicroscopy.org/rdf/2016-06/ome_core/>
+prefix dc: <http://purl.org/dc/element/1.1/>
+
+SELECT distinct ?ds ?id WHERE {
+    ?ss a ome_core:Dataset;
+        dc:identifier ?id .
+}
+"""
+        response_df = run_query(query)
+
+        print(response_df)
+
+        self.assertFalse(any(response_df.id.isna()))
 
 def run_query(query_string, endpoint=ENDPOINT, return_as_df=True):
     """ Run the query against the configured endpoint.
