@@ -1,8 +1,6 @@
 #! /bin/bash
 set -e
 
-source ~/miniconda3/bin/activate
-
 omero login -C -u root -w omero -s localhost:14064
 
 # Create 3 datasets
@@ -69,7 +67,28 @@ for image_index in {1..10}; do
     omero obj map-set $ann mapValue subject "Unittest"
     omero obj new ImageAnnotationLink parent=Image:$image_index child=$TAG2
 done
- 
+
+# Add another mapannotation but do not specify the namespace.
+ann=$(omero obj new MapAnnotation)
+omero obj new ImageAnnotationLink parent=Image:12 child=$ann
+omero obj map-set $ann mapValue annotator "MrX"
+
+# Add another mapannotation with namespace that is not a valid URI
+ann=$(omero obj new MapAnnotation ns="www.openmicroscopy.org/ns/default")
+omero obj new ImageAnnotationLink parent=Image:11 child=$ann
+omero obj map-set $ann mapValue sampletype "screen"
+
+# Add another mapannotation with namespace that is not a valid URI (issue #16).
+ann=$(omero obj new MapAnnotation ns="hms.harvard.edu/omero/forms/kvdata/MPB Annotations/")
+omero obj new ImageAnnotationLink parent=Image:10 child=$ann
+omero obj map-set $ann mapValue Assay "PRTSC"
+
+# Add another mapannotation with namespace that starts with "/" (issue #17)
+ann=$(omero obj new MapAnnotation ns="/MouseCT/Skyscan/System")
+omero obj new ImageAnnotationLink parent=Image:9 child=$ann
+omero obj map-set $ann mapValue Assay "Bruker"
+
+
 
 # List all objects
 today=$(date +%Y-%m-%d)
